@@ -10,6 +10,7 @@ import (
 	"math/big"
 	"context"
 	"github.com/keep-network/keep-ecdsa/pkg/ecdsa"
+	eth "github.com/keep-network/keep-ecdsa/pkg/chain"
 
 )
 
@@ -198,7 +199,11 @@ func  generateKey(party tss.Party ,endChan <-chan tssKeygen.LocalPartySaveData,t
 				Y:     pkY,
 			}
 			fmt.Println("get publicKey ",publicKey)
-		//	return (*ecdsa.PublicKey)(&publicKey)
+			ethPublicKey, err := eth.SerializePublicKey((*ecdsa.PublicKey)(&publicKey))
+			if err != nil {
+				fmt.Println("SerializePublicKey error ",err)
+			}
+			fmt.Println("eth Public key ",ethPublicKey)
 			return //signer, nil
 		case tmp := <-tssMessageChan://如何把message路由给其他的chan?
 		//	fmt.Println("get message ",tmp)
