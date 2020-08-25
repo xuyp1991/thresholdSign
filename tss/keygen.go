@@ -9,6 +9,8 @@ import (
 	"time"
 	"math/big"
 	"context"
+	"github.com/keep-network/keep-ecdsa/pkg/ecdsa"
+
 )
 
 const (
@@ -187,6 +189,16 @@ func  generateKey(party tss.Party ,endChan <-chan tssKeygen.LocalPartySaveData,t
 			// 	thresholdKey: ThresholdKey(keygenData),
 			// }
 			fmt.Println("get keygenData ",keygenData)
+			pkX, pkY := keygenData.ECDSAPub.X(), keygenData.ECDSAPub.Y()
+
+			curve := tss.EC()
+			publicKey := ecdsa.PublicKey{
+				Curve: curve,
+				X:     pkX,
+				Y:     pkY,
+			}
+			fmt.Println("get publicKey ",publicKey)
+		//	return (*ecdsa.PublicKey)(&publicKey)
 			return //signer, nil
 		case tmp := <-tssMessageChan://如何把message路由给其他的chan?
 		//	fmt.Println("get message ",tmp)
